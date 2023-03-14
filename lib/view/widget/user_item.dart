@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../model.dart';
 
-Widget userItem(BuildContext context, UserModel user,{required void Function() delete}){
+Widget userItem(BuildContext context, UserModel user,{required void Function() delete,required void Function() edit, }){
   return SizedBox(
     height: 80,
     width: MediaQuery.of(context).size.width,
@@ -27,9 +27,16 @@ Widget userItem(BuildContext context, UserModel user,{required void Function() d
             Divider(thickness: 2,)
           ],
         ),
-        IconButton(
-            onPressed: delete,
-            icon: Icon(Icons.delete)),
+        Row(
+          children: [
+            IconButton(
+                onPressed: delete,
+                icon: Icon(Icons.delete)),
+            IconButton(
+                onPressed: edit,
+                icon: Icon(Icons.edit)),
+          ],
+        ),
       ],
     ),
   );

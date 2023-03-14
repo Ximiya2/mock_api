@@ -5,19 +5,28 @@ import 'package:mock_api/model.dart';
 import '../../service/user_service.dart';
 import '../../service/utils_service.dart';
 
-class MyDialog extends StatefulWidget {
-  const MyDialog({Key? key}) : super(key: key);
+class EditDialog extends StatefulWidget {
+   EditDialog({this.item,Key? key}) : super(key: key);
 
+   UserModel? item;
   @override
-  _MyDialogState createState() => _MyDialogState();
+  _EditDialogState createState() => _EditDialogState();
 }
 
-class _MyDialogState extends State<MyDialog> {
+class _EditDialogState extends State<EditDialog> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController _nameController = TextEditingController();
   TextEditingController _ageController = TextEditingController();
   TextEditingController _phoneController = TextEditingController();
   String _gender = "male";
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _nameController.text = widget.item!.name;
+    _ageController.text = widget.item!.age.toString();
+    _phoneController.text = widget.item!.phone;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +76,7 @@ class _MyDialogState extends State<MyDialog> {
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter salary';
+                    return 'Please enter phone';
                   }
                   return null;
                 },
@@ -111,7 +120,7 @@ class _MyDialogState extends State<MyDialog> {
           child: Text('CANCEL'),
         ),
         TextButton(
-          onPressed: () {
+          onPressed: () async {
             if (_formKey.currentState!.validate()) {
               UserModel newUser = UserModel(
                   name: _nameController.text,
@@ -120,25 +129,24 @@ class _MyDialogState extends State<MyDialog> {
                   gender: _gender,
                   passport: 'AGUHIHDIUDFIH12346565',
                   familyMembers: [],
-                  id: '1');
+                  id: widget.item!.id);
 
-              _createUser(newUser);
+              await _editUser(newUser);
               Navigator.pop(context);
             }
           },
-          child: Text('SAVE'),
+          child: Text('Update'),
         ),
       ],
     );
   }
 
-  void _createUser(UserModel newUser) async {
+  Future<void> _editUser(UserModel newUser) async {
     bool result =
-    await UserService.createUser(newUser);
+    await UserService.editUser(newUser);
 
     if(result){
-      setState(() {});
-      Utils.snackBarSucces('Create successfully', context);
+      Utils.snackBarSucces('Update successfully', context);
     } else {
       Utils.snackBarError('Someting is wrong', context);
     }

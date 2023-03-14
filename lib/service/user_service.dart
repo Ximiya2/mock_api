@@ -102,6 +102,43 @@ static Future<bool> createUser(UserModel newPost) async {
   }
   // return null;
 }
+
+static Future<bool> editUser(UserModel newPost) async {
+  try {
+    Response res = await DioConfig.inheritentce.createRequest().put(
+        Urls.updateUsers + newPost.id.toString(),
+        data:  {
+          "name" : newPost.name,
+          "phone" : newPost.phone,
+          "age" : newPost.age,
+          "gender" : newPost.gender,
+          "passport" : newPost.passport,
+          "familyMembers" : newPost.familyMembers,
+        }
+    );
+    Log.i(res.data.toString());
+    Log.i(res.statusCode.toString());
+
+    if(res.statusCode == 200 || res.statusCode == 201) {
+      return true;
+    } else {
+      Log.e('${res.statusMessage} ${res.statusCode}');
+      return false;
+    }
+  } on DioError catch (e) {
+    if(e.response != null) {
+      Log.e(e.response!.toString());
+      return false;
+    } else {
+      rethrow;
+    }
+  } catch (e) {
+    Log.e(e.toString());
+    return false;
+  }
+  // return null;
+}
+
   // static Future<UserModel?> getUserById(int id) async {
   //   try {
   //     Response res = await DioConfig.inheritentce.createRequest().get(Urls.getSingleUsers + id.toString());
@@ -131,43 +168,7 @@ static Future<bool> createUser(UserModel newPost) async {
 
 
   //
-  // static Future<bool> editUsers(UserModel newPost) async {
-  //   try {
-  //     Response res = await DioConfig.inheritentce.createRequest().put(
-  //         Urls.updateUsers + newPost.id.toString(),
-  //         data:  {
-  //           "id" : newPost.id,
-  //           "name" : newPost.name,
-  //           "username" : newPost.username,
-  //           "email" : newPost.email,
-  //           "address" : newPost.address,
-  //           "phone" : newPost.phone,
-  //           "website" : newPost.website,
-  //           "company" : newPost.company,
-  //         }
-  //     );
-  //     Log.i(res.data.toString());
-  //     Log.i(res.statusCode.toString());
-  //
-  //     if(res.statusCode == 200 || res.statusCode == 201) {
-  //       return true;
-  //     } else {
-  //       Log.e('${res.statusMessage} ${res.statusCode}');
-  //       return false;
-  //     }
-  //   } on DioError catch (e) {
-  //     if(e.response != null) {
-  //       Log.e(e.response!.toString());
-  //       return false;
-  //     } else {
-  //       rethrow;
-  //     }
-  //   } catch (e) {
-  //     Log.e(e.toString());
-  //     return false;
-  //   }
-  //   // return null;
-  // }
+
   //
 
 }
